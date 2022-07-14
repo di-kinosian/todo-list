@@ -1,5 +1,5 @@
 import './styled.css';
-// import { ReactComponent as MyLogo } from '../logo.svg';
+// import { ReactComponent as InfoIcn } from '../assets/icons-info.svg';
 
 function Header() {
 	return (
