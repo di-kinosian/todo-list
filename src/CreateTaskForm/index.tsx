@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import './styled.css';
-// import { ReactComponent as Checkbox } from '../assets/icons-check.svg';
-
+import { ReactComponent as InfoIcn } from '../assets/icons-info.svg';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ITask {
 	id: string;
 	title: string;
+	done: boolean;
 }
 
 function CreateTaskForm() {
 	const [title, setTitle] = useState('');
-	const [taskList, setTaskList] = useState<ITask[]>([]);
-	// const [taskList, setTaskList] = useState<ITask[]>(JSON.parse(localStorage.getItem('tasks')) || []);
+	const [taskList, setTaskList] = useState<ITask[]>(
+		JSON.parse(localStorage.getItem('tasks') || '') || []
+	);
 
 	const handleTitleChange = (event: any) => {
 		setTitle(event.target.value);
@@ -24,12 +25,12 @@ function CreateTaskForm() {
 
 	const onCreate = () => {
 		const newTaskState: ITask[] = [
+			{ id: uuidv4(), title: title, done: false },
 			...taskList,
-			{ id: uuidv4(), title: title },
 		];
 		setTaskList(newTaskState);
 		setTitle('');
-		localStorage.setItem('tasks', JSON.stringify(newTaskState));
+		saveToLocalStorage(newTaskState);
 	};
 
 	const onDeleteTask = (event: any) => {
@@ -37,23 +38,34 @@ function CreateTaskForm() {
 			return task.id !== event.target.dataset.id;
 		});
 		setTaskList(newTaskList);
-		localStorage.setItem('tasks', JSON.stringify(newTaskList));
+		saveToLocalStorage(newTaskList);
 	};
 
-	// const saveLocalStorage = (list: ITask[]) => {
-	// localStorage.setItem('task', JSON.stringify(task));
-	// };
+	const saveToLocalStorage = (list: ITask[]) => {
+		localStorage.setItem('tasks', JSON.stringify(list));
+	};
 
 	// useEffect(() => {
 	// 	localStorage.setItem('task', JSON.stringify());
 	// });
+
+	const handleCheckboxChange = (event: any) => {
+		console.log(event.target.checked);
+		const newTaskList = taskList.map((task) => {
+			return task.id === event.target.dataset.id
+				? { id: task.id, title: task.title, done: event.target.checked }
+				: task;
+		});
+		setTaskList(newTaskList);
+		saveToLocalStorage(newTaskList);
+	};
 
 	return (
 		<>
 			<div className="task-conteiner">
 				<input
 					type="text"
-					className="task-form"
+					className="task-form frame-task"
 					value={title}
 					onChange={handleTitleChange}
 					placeholder="Enter task"
@@ -79,9 +91,16 @@ function CreateTaskForm() {
 				Task list:
 				{taskList.map((task) => {
 					return (
-						<div className="task">
-							<input type="checkbox" className="checkbox"></input>
+						<div className="task frame-task" key={task.id}>
+							<input
+								type="checkbox"
+								className="checkbox"
+								data-id={task.id}
+								checked={task.done}
+								onChange={handleCheckboxChange}
+							/>
 							<div className="task-title">{task.title}</div>
+							<InfoIcn width={20} height={20} />
 							<div
 								className="close-btn"
 								data-id={task.id}

@@ -4,8 +4,7 @@
 	width: 400px;
 }
 
-.task-form,
-.task {
+.frame-task {
 	height: 42px;
 	border: 1px solid gray;
 	border-radius: 8px;
@@ -32,19 +31,22 @@
 
 .button-create {
 	margin-left: 8px;
-	background: rgb(135, 161, 224);
+	background: rgb(92, 130, 225);
 	color: white;
 }
+
 .button-create:hover {
-	background: rgb(92, 130, 225);
+	background: rgb(71, 113, 218);
+	/* cursor: pointer; */
 }
 
 .button-create:disabled {
-	background: rgb(135, 161, 224);
+	background: rgba(135, 161, 224, 0.7);
+	cursor: default;
 }
 
 .button-cancel {
-	background: #e0e1e2 none;
+	background: #e0e1e2;
 	color: black;
 }
 
@@ -66,19 +68,24 @@
 	position: relative;
 	display: flex;
 	align-items: center;
+	padding-right: 32px;
+}
+
+.task:hover > .close-btn {
+	visibility: visible;
 }
 
 .close-btn {
 	color: rgb(55, 55, 55);
-	font-size: 28px;
+	font-size: 25px;
 	position: absolute;
 	right: 7px;
 	top: 18px;
 	line-height: 0;
 	cursor: pointer;
 	transform: rotate(45deg);
+	visibility: hidden;
 }
-
 .checkbox {
 	cursor: pointer;
 	-webkit-appearance: none;
@@ -110,4 +117,7 @@
 
 .task-title {
 	line-height: 15px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
