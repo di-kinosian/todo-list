@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import './styled.css';
+import './styles.css';
 import { ReactComponent as InfoIcn } from '../assets/icons-info.svg';
 import { v4 as uuidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
 
-interface ITask {
+export interface ITask {
 	id: string;
 	title: string;
 	done: boolean;
+	description: string;
 }
 
 function CreateTaskForm() {
@@ -14,6 +16,11 @@ function CreateTaskForm() {
 	const [taskList, setTaskList] = useState<ITask[]>(
 		JSON.parse(localStorage.getItem('tasks') || '') || []
 	);
+	const [description, setDescription] = useState('');
+
+	const handleDescriptionChange = (event: any) => {
+		setDescription(event.target.value);
+	};
 
 	const handleTitleChange = (event: any) => {
 		setTitle(event.target.value);
@@ -25,9 +32,16 @@ function CreateTaskForm() {
 
 	const onCreate = () => {
 		const newTaskState: ITask[] = [
-			{ id: uuidv4(), title: title, done: false },
+			{
+				id: uuidv4(),
+				title: title,
+				done: false,
+				description: description,
+			},
 			...taskList,
 		];
+		console.log(newTaskState);
+
 		setTaskList(newTaskState);
 		setTitle('');
 		saveToLocalStorage(newTaskState);
@@ -50,10 +64,14 @@ function CreateTaskForm() {
 	// });
 
 	const handleCheckboxChange = (event: any) => {
-		console.log(event.target.checked);
 		const newTaskList = taskList.map((task) => {
 			return task.id === event.target.dataset.id
-				? { id: task.id, title: task.title, done: event.target.checked }
+				? {
+						id: task.id,
+						title: task.title,
+						done: event.target.checked,
+						description: event.target.description,
+				  }
 				: task;
 		});
 		setTaskList(newTaskList);
@@ -65,20 +83,26 @@ function CreateTaskForm() {
 			<div className="task-conteiner">
 				<input
 					type="text"
-					className="task-form frame-task"
+					className="task-form input"
 					value={title}
 					onChange={handleTitleChange}
 					placeholder="Enter task"
 				/>
+				<textarea
+					className="description-fields input"
+					value={description}
+					onChange={handleDescriptionChange}
+					placeholder="Enter description"
+				/>
 				<div className="button-row">
 					<button
-						className="button-cancel button"
+						className="button-secondary button"
 						onClick={clearTitle}
 					>
 						Cancel
 					</button>
 					<button
-						className="button-create button"
+						className="button-create button-primary button"
 						disabled={!title}
 						onClick={onCreate}
 					>
@@ -91,7 +115,7 @@ function CreateTaskForm() {
 				Task list:
 				{taskList.map((task) => {
 					return (
-						<div className="task frame-task" key={task.id}>
+						<div className="task" key={task.id}>
 							<input
 								type="checkbox"
 								className="checkbox"
@@ -100,7 +124,9 @@ function CreateTaskForm() {
 								onChange={handleCheckboxChange}
 							/>
 							<div className="task-title">{task.title}</div>
-							<InfoIcn width={20} height={20} />
+							<Link to={'/list/' + task.id} className="info-icn">
+								<InfoIcn width={20} height={20} />
+							</Link>
 							<div
 								className="close-btn"
 								data-id={task.id}

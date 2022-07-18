@@ -1,14 +1,21 @@
-import React from 'react';
-// import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './Header';
 import CreateTaskForm from './CreateTaskForm';
+import Home from './screens/Home';
+import TaskDetails from './screens/TaskDetails';
 
 function App() {
 	return (
 		<>
-			<Header />
-			<CreateTaskForm />
+			<BrowserRouter>
+				<Header />
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/list" element={<CreateTaskForm />} />
+					<Route path="/list/:taskId" element={<TaskDetails />} />
+				</Routes>
+			</BrowserRouter>
 		</>
 	);
 }
