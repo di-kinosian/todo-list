@@ -4,7 +4,7 @@
 	width: 400px;
 }
 
-.frame-task {
+/* .input {
 	height: 42px;
 	border: 1px solid gray;
 	border-radius: 8px;
@@ -12,6 +12,14 @@
 	margin-top: 20px;
 	padding: 8px;
 	font-size: 16px;
+	outline: none;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+		'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+		'Helvetica Neue', sans-serif;
+} */
+
+.input:focus {
+	border: 1px solid rgb(92, 130, 225);
 }
 
 .button-row {
@@ -20,38 +28,8 @@
 	justify-content: flex-end;
 }
 
-.button {
-	height: 30px;
-	border: none;
-	border-radius: 6px;
-	font-weight: bold;
-	width: 64px;
-	cursor: pointer;
-}
-
 .button-create {
 	margin-left: 8px;
-	background: rgb(92, 130, 225);
-	color: white;
-}
-
-.button-create:hover {
-	background: rgb(71, 113, 218);
-	/* cursor: pointer; */
-}
-
-.button-create:disabled {
-	background: rgba(135, 161, 224, 0.7);
-	cursor: default;
-}
-
-.button-cancel {
-	background: #e0e1e2;
-	color: black;
-}
-
-.button-cancel:hover {
-	background: #cacbcd;
 }
 
 .list-tasks {
@@ -68,16 +46,28 @@
 	position: relative;
 	display: flex;
 	align-items: center;
-	padding-right: 32px;
+	height: 42px;
+	border-radius: 8px;
+	padding: 8px 32px 8px 8px;
+	font-size: 16px;
+	outline: none;
+}
+
+.info:hover > .close-btn {
+	visibility: visible;
 }
 
 .task:hover > .close-btn {
 	visibility: visible;
 }
 
+.task:hover > .info-icn {
+	visibility: visible;
+}
+
 .close-btn {
 	color: rgb(55, 55, 55);
-	font-size: 25px;
+	font-size: 28px;
 	position: absolute;
 	right: 7px;
 	top: 18px;
@@ -120,4 +110,23 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.info-icn {
+	height: 20px;
+	width: 20px;
+	margin-left: auto;
+	visibility: hidden;
+}
+
+.description-fields {
+	height: 84px;
+	resize: none;
+	overflow: hidden;
+	padding-right: 25px;
+}
+
+.description-fields:hover {
+	overflow: visible;
+	padding-right: 15px;
 }
