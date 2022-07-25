@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ITask } from '../../CreateTaskForm';
+import { ITask } from '../../components/CreateTaskForm';
+import Dropdown from '../../components/Dropdown';
 import './styles.css';
 
 function TaskDetails() {
@@ -9,12 +10,14 @@ function TaskDetails() {
 	const taskList: ITask[] = JSON.parse(localStorage.getItem('tasks') || '');
 
 	const taskData = taskList.find((el: any) => {
+		console.log(el.status, 'HERE');
 		return el.id === taskId;
 	});
 
 	const [title, setTitle] = useState(taskData?.title || '');
 	const [description, setDescription] = useState(taskData?.description || '');
 	const [isEdit, setIsEdit] = useState(false);
+	const [status, setStatus] = useState(taskData?.status || '');
 
 	const onTitleChange = (event: any) => {
 		setTitle(event.target.value);
@@ -26,7 +29,7 @@ function TaskDetails() {
 		setIsEdit(true);
 	};
 
-	const onAddToStorage = () => {
+	const onSave = () => {
 		const newList: ITask[] = taskList.map((el) => {
 			if (el.id === taskId) {
 				return {
@@ -34,6 +37,7 @@ function TaskDetails() {
 					description: description,
 					done: el.done,
 					id: el.id,
+					status: status,
 				};
 			} else {
 				return el;
@@ -47,6 +51,17 @@ function TaskDetails() {
 		setTitle(taskData?.title || '');
 		setDescription(taskData?.description || '');
 		setIsEdit(false);
+	};
+
+	const options = [
+		{ value: 'TO_DO', label: 'to do' },
+		{ value: 'IN_PROGRESS', label: 'in progress' },
+		{ value: 'DONE', label: 'done' },
+	];
+
+	const onChangeStatus = (value: string) => {
+		setStatus(value);
+		setIsEdit(true);
 	};
 
 	return (
@@ -63,6 +78,14 @@ function TaskDetails() {
 					value={description}
 					onChange={onDescriptionChange}
 				/>
+
+				<Dropdown
+					value={status}
+					onSelect={onChangeStatus}
+					options={options}
+					placeholder={'Select state'}
+				/>
+
 				<div className="button-row ">
 					<Link to="/list/">
 						<button className="button-back button-secondary button">
@@ -77,8 +100,8 @@ function TaskDetails() {
 					</button>
 					<button
 						className="button-create button-primary button"
-						disabled={!(title && isEdit)}
-						onClick={onAddToStorage}
+						disabled={!title || !isEdit}
+						onClick={onSave}
 					>
 						Save
 					</button>

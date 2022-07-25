@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './styles.css';
-import { ReactComponent as InfoIcn } from '../assets/icons-info.svg';
+import { ReactComponent as InfoIcn } from '../../assets/icons-info.svg';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ export interface ITask {
 	title: string;
 	done: boolean;
 	description: string;
+	status: string;
 }
 
 function CreateTaskForm() {
@@ -37,10 +38,10 @@ function CreateTaskForm() {
 				title: title,
 				done: false,
 				description: description,
+				status: '',
 			},
 			...taskList,
 		];
-		console.log(newTaskState);
 
 		setTaskList(newTaskState);
 		setTitle('');
@@ -70,7 +71,8 @@ function CreateTaskForm() {
 						id: task.id,
 						title: task.title,
 						done: event.target.checked,
-						description: event.target.description,
+						description: task.description,
+						status: task.status,
 				  }
 				: task;
 		});
