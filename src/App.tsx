@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Header from './Header';
-import CreateTaskForm from './CreateTaskForm';
+import Header from './components/Header';
+import CreateTaskForm from './components/CreateTaskForm';
 import Home from './screens/Home';
 import TaskDetails from './screens/TaskDetails';
 
