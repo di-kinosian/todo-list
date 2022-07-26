@@ -55,9 +55,12 @@ const Dropdown: FC<IProps> = (props) => {
 	};
 
 	return (
-		<div className="dropdown-conteiner" ref={containerRef}>
+		<div
+			className={`dropdown-conteiner ${props.className}`}
+			ref={containerRef}
+		>
 			<div
-				className={ 
+				className={
 					showing ? 'dropdown-control opened' : 'dropdown-control'
 				}
 				onClick={showOptions}
@@ -74,7 +77,6 @@ const Dropdown: FC<IProps> = (props) => {
 					className="arrow-icn"
 					alt=""
 					src={arrowIcon}
-					onClick={showOptions}
 					style={{
 						transform: showing ? 'rotate(90deg)' : 'rotate(270deg)',
 					}}
@@ -85,6 +87,7 @@ const Dropdown: FC<IProps> = (props) => {
 				<div className="dropdown-options" onClick={closeOptions}>
 					{props.options.map((item) => (
 						<div
+							key={item.value}
 							className={
 								item.value === props.value
 									? 'option active'
