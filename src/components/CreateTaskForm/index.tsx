@@ -3,6 +3,7 @@ import './styles.css';
 import { ReactComponent as InfoIcn } from '../../assets/icons-info.svg';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
+import Input from '../Input';
 
 export interface ITask {
 	id: string;
@@ -23,8 +24,8 @@ function CreateTaskForm() {
 		setDescription(event.target.value);
 	};
 
-	const handleTitleChange = (event: any) => {
-		setTitle(event.target.value);
+	const handleTitleChange = (value: string) => {
+		setTitle(value);
 	};
 
 	const clearTitle = () => {
@@ -60,10 +61,6 @@ function CreateTaskForm() {
 		localStorage.setItem('tasks', JSON.stringify(list));
 	};
 
-	// useEffect(() => {
-	// 	localStorage.setItem('task', JSON.stringify());
-	// });
-
 	const handleCheckboxChange = (event: any) => {
 		const newTaskList = taskList.map((task) => {
 			return task.id === event.target.dataset.id
@@ -83,13 +80,7 @@ function CreateTaskForm() {
 	return (
 		<>
 			<div className="task-conteiner">
-				<input
-					type="text"
-					className="task-form input"
-					value={title}
-					onChange={handleTitleChange}
-					placeholder="Enter task"
-				/>
+				<Input value={title} onChange={handleTitleChange} className="task-input"/>
 				<textarea
 					className="description-fields input"
 					value={description}

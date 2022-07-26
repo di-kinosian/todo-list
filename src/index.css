@@ -52,11 +52,11 @@ code {
 /*input*/
 
 .input {
+	display: block;
 	height: 42px;
 	border: 1px solid gray;
 	border-radius: 8px;
 	width: 100%;
-	margin-top: 20px;
 	padding: 8px;
 	font-size: 16px;
 	outline: none;

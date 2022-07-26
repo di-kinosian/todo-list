@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ITask } from '../../components/CreateTaskForm';
 import Dropdown from '../../components/Dropdown';
+import Input from '../../components/Input';
 import './styles.css';
 
 function TaskDetails() {
@@ -10,7 +11,6 @@ function TaskDetails() {
 	const taskList: ITask[] = JSON.parse(localStorage.getItem('tasks') || '');
 
 	const taskData = taskList.find((el: any) => {
-		console.log(el.status, 'HERE');
 		return el.id === taskId;
 	});
 
@@ -19,8 +19,8 @@ function TaskDetails() {
 	const [isEdit, setIsEdit] = useState(false);
 	const [status, setStatus] = useState(taskData?.status || '');
 
-	const onTitleChange = (event: any) => {
-		setTitle(event.target.value);
+	const onTitleChange = (value: string) => {
+		setTitle(value);
 		setIsEdit(true);
 	};
 
@@ -67,19 +67,19 @@ function TaskDetails() {
 	return (
 		<>
 			<div className="task-conteiner">
-				<input
-					type="text"
-					className="task-form input"
+				<Input
+					className="task-input"
 					value={title}
 					onChange={onTitleChange}
 				/>
 				<textarea
-					className="description-fields input"
+					className="description-fields input task-input"
 					value={description}
 					onChange={onDescriptionChange}
 				/>
 
 				<Dropdown
+					className="task-input"
 					value={status}
 					onSelect={onChangeStatus}
 					options={options}
