@@ -4,14 +4,46 @@ import { ReactComponent as InfoIcn } from '../../assets/icons-info.svg';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import Input from '../Input';
+import Tag from '../Tag';
+import { ReactComponent as WarningIcn } from '../../assets/warning.svg';
 
 export interface ITask {
 	id: string;
 	title: string;
-	done: boolean;
 	description: string;
 	status: string;
+	priority: string;
 }
+
+const transformStatus = (str: string): string => {
+	return str.replace('_', ' ').toUpperCase();
+};
+
+const getStatusColor = (status: string): string => {
+	switch (status) {
+		case 'TO_DO':
+			return '#cacbcd';
+		case 'IN_PROGRESS':
+			return '#ffbd43';
+		case 'DONE':
+			return 'rgb(115 206 115)';
+		default:
+			return '#cacbcd';
+	}
+};
+
+const getPriorityColor = (priority: string): string => {
+	switch (priority) {
+		case 'LOW':
+			return '#7394d6';
+		case 'HIGH':
+			return '#ffbd43';
+		case 'CRITICAL':
+			return 'red';
+		default:
+			return '#cacbcd';
+	}
+};
 
 function CreateTaskForm() {
 	const [title, setTitle] = useState('');
@@ -37,15 +69,16 @@ function CreateTaskForm() {
 			{
 				id: uuidv4(),
 				title: title,
-				done: false,
 				description: description,
-				status: '',
+				status: 'TO_DO',
+				priority: 'NONE',
 			},
 			...taskList,
 		];
 
 		setTaskList(newTaskState);
 		setTitle('');
+		setDescription('');
 		saveToLocalStorage(newTaskState);
 	};
 
@@ -61,26 +94,16 @@ function CreateTaskForm() {
 		localStorage.setItem('tasks', JSON.stringify(list));
 	};
 
-	const handleCheckboxChange = (event: any) => {
-		const newTaskList = taskList.map((task) => {
-			return task.id === event.target.dataset.id
-				? {
-						id: task.id,
-						title: task.title,
-						done: event.target.checked,
-						description: task.description,
-						status: task.status,
-				  }
-				: task;
-		});
-		setTaskList(newTaskList);
-		saveToLocalStorage(newTaskList);
-	};
-
 	return (
 		<>
 			<div className="task-conteiner">
-				<Input value={title} onChange={handleTitleChange} className="task-input"/>
+				<h4 className="tit">Title:</h4>
+				<Input
+					value={title}
+					onChange={handleTitleChange}
+					className="task-input"
+				/>
+				<h4 className="tit">Description:</h4>
 				<textarea
 					className="description-fields input"
 					value={description}
@@ -109,13 +132,18 @@ function CreateTaskForm() {
 				{taskList.map((task) => {
 					return (
 						<div className="task" key={task.id}>
-							<input
-								type="checkbox"
-								className="checkbox"
-								data-id={task.id}
-								checked={task.done}
-								onChange={handleCheckboxChange}
+							<Tag
+								value={transformStatus(task.status)}
+								color={getStatusColor(task.status)}
 							/>
+							{task.priority && task.priority !== 'NONE' ? (
+								<WarningIcn
+									className="warning-icn"
+									style={{
+										fill: getPriorityColor(task.priority),
+									}}
+								/>
+							) : null}
 							<div className="task-title">{task.title}</div>
 							<Link to={'/list/' + task.id} className="info-icn">
 								<InfoIcn width={20} height={20} />
