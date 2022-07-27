@@ -108,6 +108,7 @@
 	resize: none;
 	overflow: hidden;
 	padding-right: 25px;
+	margin-top: 8px;
 }
 
 .description-fields:hover {
@@ -115,6 +116,16 @@
 	padding-right: 15px;
 }
 
-.task-input {
-	margin: 20px 0;
+.tit {
+	margin: 0;
+	color: #525252;
+}
+
+.warning-icn {
+	width: 20px;
+	height: 20px;
+	margin-right: 8px;
+}
+.warning-icn path {
+	fill: inherit;
 }
