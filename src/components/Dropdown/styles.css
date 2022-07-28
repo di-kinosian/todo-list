@@ -69,11 +69,11 @@
 	border-radius: 0 0 4px 4px;
 }
 
-.active {
+.option.active {
 	background: rgba(0, 0, 0, 0.03);
 	font-weight: bold;
 }
-.active:hover {
+.option.active:hover {
 	background: rgba(0, 0, 0, 0.05);
 }
 

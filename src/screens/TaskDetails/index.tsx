@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ITask } from '../../components/CreateTaskForm';
+
 import Dropdown from '../../components/Dropdown';
 import Input from '../../components/Input';
+import { ITask } from '../../types';
 import './styles.css';
 
 function TaskDetails() {
