@@ -1,5 +1,4 @@
 import './styled.css';
-// import { ReactComponent as InfoIcn } from '../assets/icons-info.svg';
 
 function Header() {
 	return (

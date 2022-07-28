@@ -6,44 +6,10 @@ import { Link } from 'react-router-dom';
 import Input from '../Input';
 import Tag from '../Tag';
 import { ReactComponent as WarningIcn } from '../../assets/warning.svg';
-
-export interface ITask {
-	id: string;
-	title: string;
-	description: string;
-	status: string;
-	priority: string;
-}
-
-const transformStatus = (str: string): string => {
-	return str.replace('_', ' ').toUpperCase();
-};
-
-const getStatusColor = (status: string): string => {
-	switch (status) {
-		case 'TO_DO':
-			return '#cacbcd';
-		case 'IN_PROGRESS':
-			return '#ffbd43';
-		case 'DONE':
-			return 'rgb(115 206 115)';
-		default:
-			return '#cacbcd';
-	}
-};
-
-const getPriorityColor = (priority: string): string => {
-	switch (priority) {
-		case 'LOW':
-			return '#7394d6';
-		case 'HIGH':
-			return '#ffbd43';
-		case 'CRITICAL':
-			return 'red';
-		default:
-			return '#cacbcd';
-	}
-};
+import { ReactComponent as BurgerIcn } from '../../assets/icon-burger.svg';
+import Board from '../Board';
+import { ITask } from '../../types';
+import TaskList from '../TaskList';
 
 function CreateTaskForm() {
 	const [title, setTitle] = useState('');
@@ -51,6 +17,7 @@ function CreateTaskForm() {
 		JSON.parse(localStorage.getItem('tasks') || '') || []
 	);
 	const [description, setDescription] = useState('');
+	const [mode, setMode] = useState('column');
 
 	const handleDescriptionChange = (event: any) => {
 		setDescription(event.target.value);
@@ -82,9 +49,9 @@ function CreateTaskForm() {
 		saveToLocalStorage(newTaskState);
 	};
 
-	const onDeleteTask = (event: any) => {
+	const onDeleteTask = (id: string) => {
 		const newTaskList = taskList.filter((task) => {
-			return task.id !== event.target.dataset.id;
+			return task.id !== id;
 		});
 		setTaskList(newTaskList);
 		saveToLocalStorage(newTaskList);
@@ -92,6 +59,14 @@ function CreateTaskForm() {
 
 	const saveToLocalStorage = (list: ITask[]) => {
 		localStorage.setItem('tasks', JSON.stringify(list));
+	};
+
+	const onSelectListMode = () => {
+		setMode('list');
+	};
+
+	const onSelectColumnMode = () => {
+		setMode('column');
 	};
 
 	return (
@@ -128,36 +103,37 @@ function CreateTaskForm() {
 			</div>
 
 			<div className="list-tasks">
-				Task list:
-				{taskList.map((task) => {
-					return (
-						<div className="task" key={task.id}>
-							<Tag
-								value={transformStatus(task.status)}
-								color={getStatusColor(task.status)}
-							/>
-							{task.priority && task.priority !== 'NONE' ? (
-								<WarningIcn
-									className="warning-icn"
-									style={{
-										fill: getPriorityColor(task.priority),
-									}}
-								/>
-							) : null}
-							<div className="task-title">{task.title}</div>
-							<Link to={'/list/' + task.id} className="info-icn">
-								<InfoIcn width={20} height={20} />
-							</Link>
-							<div
-								className="close-btn"
-								data-id={task.id}
-								onClick={onDeleteTask}
-							>
-								+
-							</div>
+				<div className="tasks-panel">
+					Task list:
+					<div className="button-group">
+						<div
+							className={
+								mode === 'list'
+									? 'button-group-btn active'
+									: 'button-group-btn'
+							}
+							onClick={onSelectListMode}
+						>
+							<BurgerIcn className="burger-icn" />
 						</div>
-					);
-				})}
+
+						<div
+							className={
+								mode === 'column'
+									? 'button-group-btn active'
+									: 'button-group-btn'
+							}
+							onClick={onSelectColumnMode}
+						>
+							<BurgerIcn className="burger-icn rotate" />
+						</div>
+					</div>
+				</div>
+				{mode === 'list' ? (
+					<TaskList taskList={taskList} onDelete={onDeleteTask} />
+				) : (
+					<Board list={taskList} onDelete={onDeleteTask} />
+				)}
 			</div>
 		</>
 	);
