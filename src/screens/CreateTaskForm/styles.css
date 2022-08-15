@@ -2,17 +2,12 @@
 	margin: 0 auto;
 	width: 400px;
 }
-/* .list-tasks {
-	width: 100%;
-	margin: 0 auto;
-} */
 
 .tasks-panel {
 	margin: 0 auto;
 	width: 400px;
 	display: flex;
 	flex-direction: column;
-	/* justify-content:space-between; */
 }
 
 .tasks-container {
