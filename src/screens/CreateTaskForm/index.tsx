@@ -3,21 +3,25 @@ import './styles.css';
 import { ReactComponent as InfoIcn } from '../../assets/icons-info.svg';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
-import Input from '../Input';
-import Tag from '../Tag';
+import Input from '../../components/Input';
+import Tag from '../../components/Tag';
 import { ReactComponent as WarningIcn } from '../../assets/warning.svg';
 import { ReactComponent as BurgerIcn } from '../../assets/icon-burger.svg';
-import Board from '../Board';
+import Board from '../../components/Board';
 import { ITask } from '../../types';
-import TaskList from '../TaskList';
+import TaskList from '../../components/TaskList';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../config/store';
+import { taskListSlice } from '../../redux/taskList';
 
 function CreateTaskForm() {
 	const [title, setTitle] = useState('');
-	const [taskList, setTaskList] = useState<ITask[]>(
-		JSON.parse(localStorage.getItem('tasks') || '') || []
-	);
+
 	const [description, setDescription] = useState('');
 	const [mode, setMode] = useState('column');
+
+	const taskList2 = useSelector((state: RootState) => state.taskList.list);
+	const dispatch = useDispatch();
 
 	const handleDescriptionChange = (event: any) => {
 		setDescription(event.target.value);
@@ -32,33 +36,21 @@ function CreateTaskForm() {
 	};
 
 	const onCreate = () => {
-		const newTaskState: ITask[] = [
-			{
-				id: uuidv4(),
-				title: title,
-				description: description,
-				status: 'TO_DO',
-				priority: 'NONE',
-			},
-			...taskList,
-		];
+		const newTaskState: ITask = {
+			id: uuidv4(),
+			title: title,
+			description: description,
+			status: 'TO_DO',
+			priority: 'NONE',
+		};
 
-		setTaskList(newTaskState);
+		dispatch(taskListSlice.actions.onCreate(newTaskState));
 		setTitle('');
 		setDescription('');
-		saveToLocalStorage(newTaskState);
 	};
 
 	const onDeleteTask = (id: string) => {
-		const newTaskList = taskList.filter((task) => {
-			return task.id !== id;
-		});
-		setTaskList(newTaskList);
-		saveToLocalStorage(newTaskList);
-	};
-
-	const saveToLocalStorage = (list: ITask[]) => {
-		localStorage.setItem('tasks', JSON.stringify(list));
+		dispatch(taskListSlice.actions.onDeleteTask(id));
 	};
 
 	const onSelectListMode = () => {
@@ -130,9 +122,9 @@ function CreateTaskForm() {
 					</div>
 				</div>
 				{mode === 'list' ? (
-					<TaskList taskList={taskList} onDelete={onDeleteTask} />
+					<TaskList taskList={taskList2} onDelete={onDeleteTask} />
 				) : (
-					<Board list={taskList} onDelete={onDeleteTask} />
+					<Board list={taskList2} onDelete={onDeleteTask} />
 				)}
 			</div>
 		</>

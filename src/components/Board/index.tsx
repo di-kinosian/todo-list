@@ -3,13 +3,6 @@ import { Link } from 'react-router-dom';
 import { ITask } from '../../types';
 import Tag from '../Tag';
 import './styles.css';
-// import { ReactComponent as WarningIcn } from '../../assets/warning.svg';
-// import { ReactComponent as InfoIcn } from '../../assets/icons-info.svg';
-// import {
-// 	getPriorityColor,
-// 	getStatusColor,
-// 	transformStatus,
-// } from '../../helpers';
 import Task from '../Task';
 
 interface IProps {
@@ -28,7 +21,13 @@ const Board: FC<IProps> = (props) => {
 						return task.status === 'TO_DO';
 					})
 					.map((task) => {
-						return <Task data={task} onDelete={props.onDelete} />;
+						return (
+							<Task
+								data={task}
+								onDelete={props.onDelete}
+								key={task.id}
+							/>
+						);
 					})}
 			</div>
 			<div className="column">
@@ -38,7 +37,13 @@ const Board: FC<IProps> = (props) => {
 						return task.status === 'IN_PROGRESS';
 					})
 					.map((task) => {
-						return <Task data={task} onDelete={props.onDelete} />;
+						return (
+							<Task
+								data={task}
+								onDelete={props.onDelete}
+								key={task.id}
+							/>
+						);
 					})}
 			</div>
 			<div className="column">
@@ -48,7 +53,13 @@ const Board: FC<IProps> = (props) => {
 						return task.status === 'DONE';
 					})
 					.map((task) => {
-						return <Task data={task} onDelete={props.onDelete} />;
+						return (
+							<Task
+								data={task}
+								onDelete={props.onDelete}
+								key={task.id}
+							/>
+						);
 					})}
 			</div>
 		</div>

@@ -3,7 +3,6 @@ import { ITask } from '../../types';
 import Tag from '../Tag';
 import './styles.css';
 import { ReactComponent as WarningIcn } from '../../assets/warning.svg';
-import { ReactComponent as BurgerIcn } from '../../assets/icon-burger.svg';
 import { Link } from 'react-router-dom';
 import { ReactComponent as InfoIcn } from '../../assets/icons-info.svg';
 import {

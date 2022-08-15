@@ -1,15 +1,19 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 import Dropdown from '../../components/Dropdown';
 import Input from '../../components/Input';
+import { RootState } from '../../config/store';
+import { taskListSlice } from '../../redux/taskList';
 import { ITask } from '../../types';
 import './styles.css';
 
 function TaskDetails() {
 	const { taskId } = useParams();
 
-	const taskList: ITask[] = JSON.parse(localStorage.getItem('tasks') || '');
+	const taskList = useSelector((state: RootState) => state.taskList.list);
+	const dispatch = useDispatch();
 
 	const taskData = taskList.find((el: any) => {
 		return el.id === taskId;
@@ -32,21 +36,15 @@ function TaskDetails() {
 	};
 
 	const onSave = () => {
-		const newList: ITask[] = taskList.map((el) => {
-			if (el.id === taskId) {
-				return {
-					title: title,
-					description: description,
-					// done: el.done,
-					id: el.id,
-					status: status,
-					priority: importance,
-				};
-			} else {
-				return el;
-			}
-		});
-		localStorage.setItem('tasks', JSON.stringify(newList));
+		const updatedTask: ITask = {
+			title: title,
+			description: description,
+			id: taskData?.id || '',
+			status: status,
+			priority: importance,
+		};
+
+		dispatch(taskListSlice.actions.onEdit(updatedTask));
 		setIsEdit(false);
 	};
 
