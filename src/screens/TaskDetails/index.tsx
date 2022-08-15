@@ -53,6 +53,8 @@ function TaskDetails() {
 	const onResetToInisial = () => {
 		setTitle(taskData?.title || '');
 		setDescription(taskData?.description || '');
+		setStatus(taskData?.status || '');
+		setImportance(taskData?.priority || '');
 		setIsEdit(false);
 	};
 
